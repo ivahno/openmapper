@@ -1,0 +1,193 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+jobs:
+  build-and-test:
+    name: Build & Test (.NET ${{ matrix.dotnet }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        dotnet: ['8.0.x', '9.0.x', '10.0.x']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ matrix.dotnet }}
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore -c Release
+
+      - name: Test with Coverage
+        run: >
+          dotnet test --no-build -c Release
+          --logger "trx;LogFileName=results.trx"
+          --results-directory TestResults
+          --collect:"XPlat Code Coverage"
+          -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.os }}-net${{ matrix.dotnet }}
+          path: TestResults/
+
+      - name: Upload Coverage
+        if: matrix.os == 'ubuntu-latest' && matrix.dotnet == '10.0.x'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: TestResults/**/coverage.cobertura.xml
+
+      - name: Coverage Gate (70% minimum)
+        if: matrix.os == 'ubuntu-latest' && matrix.dotnet == '10.0.x'
+        run: |
+          FILES=$(find TestResults -name 'coverage.cobertura.xml')
+          if [ -z "$FILES" ]; then
+            echo "::warning::No coverage files found, skipping gate"
+            exit 0
+          fi
+          TOTAL_COVERED=0
+          TOTAL_COVERABLE=0
+          for f in $FILES; do
+            COVERED=$(grep -oP 'lines-covered="\K[0-9]+' "$f" | head -1)
+            VALID=$(grep -oP 'lines-valid="\K[0-9]+' "$f" | head -1)
+            if [ -n "$COVERED" ] && [ -n "$VALID" ] && [ "$VALID" -gt 0 ]; then
+              TOTAL_COVERED=$((TOTAL_COVERED + COVERED))
+              TOTAL_COVERABLE=$((TOTAL_COVERABLE + VALID))
+              RATE=$(echo "scale=1; $COVERED * 100 / $VALID" | bc -l)
+              echo "  $(basename $(dirname $(dirname $f))): ${RATE}% ($COVERED/$VALID)"
+            fi
+          done
+          if [ "$TOTAL_COVERABLE" -eq 0 ]; then
+            echo "::warning::No coverable lines found, skipping gate"
+            exit 0
+          fi
+          PERCENT=$((TOTAL_COVERED * 100 / TOTAL_COVERABLE))
+          echo "Overall line coverage: ${PERCENT}% ($TOTAL_COVERED/$TOTAL_COVERABLE)"
+          if [ "$PERCENT" -lt 70 ]; then
+            echo "::error::Line coverage ${PERCENT}% is below 70% threshold"
+            exit 1
+          fi
+
+  format-check:
+    name: Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Check Formatting
+        run: dotnet format --verify-no-changes --severity warn
+
+  aot-validation:
+    name: AOT Validation (${{ matrix.rid }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            rid: linux-x64
+          - os: windows-latest
+            rid: win-x64
+          - os: macos-latest
+            rid: osx-arm64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Publish AOT Sample (zero trim warnings required)
+        run: >
+          dotnet publish samples/OpenAutoMapper.Samples.Aot/
+          -c Release
+          -r ${{ matrix.rid }}
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Check for Vulnerable Dependencies
+        run: |
+          dotnet list package --vulnerable --include-transitive 2>&1 | tee vuln-report.txt
+          if grep -qE "(Critical|High)" vuln-report.txt; then
+            echo "::error::Critical or High vulnerabilities found"
+            cat vuln-report.txt
+            exit 1
+          fi
+
+  benchmarks:
+    name: Performance Benchmarks
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Run Benchmarks (short mode)
+        run: >
+          dotnet run --project tests/OpenAutoMapper.Benchmarks/ -c Release --
+          --filter '*FlatMappingBenchmarks*'
+          --exporters json
+          --artifacts benchmark-results
+
+      - name: Upload Benchmark Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: benchmark-results/
+
+      - name: Performance Regression Check
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          tool: 'benchmarkdotnet'
+          output-file-path: benchmark-results/results/BenchmarkDotNet.Artifacts/results/*.json
+          alert-threshold: '150%'
+          fail-on-alert: true
+          comment-on-alert: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: false

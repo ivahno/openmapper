@@ -1,0 +1,20 @@
+title: OpenAutoMapper
+description: A Native AOT-first, high-performance object mapper for .NET
+remote_theme: just-the-docs/just-the-docs
+
+url: https://openautomappe.github.io/OpenAutoMapper
+
+aux_links:
+  "GitHub":
+    - "https://github.com/OpenAutoMapper/OpenAutoMapper"
+
+nav_sort: case_insensitive
+
+heading_anchors: true
+
+search_enabled: true
+
+back_to_top: true
+back_to_top_text: "Back to top"
+
+footer_content: "OpenAutoMapper is licensed under the <a href=\"https://github.com/OpenAutoMapper/OpenAutoMapper/blob/main/LICENSE\">MIT License</a>."

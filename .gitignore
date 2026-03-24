@@ -1,0 +1,61 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## NuGet
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nupkg
+**/nupkg/
+*.snupkg
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Ll]og/
+[Ll]ogs/
+
+## Visual Studio
+.vs/
+*.rsuser
+*.cache
+*.ncb
+*.opendb
+*.opensdf
+*.pdb
+*.dbmdl
+*.pfx
+*.publishsettings
+
+## Rider
+.idea/
+*.sln.iml
+
+## VS Code
+.vscode/
+
+## Test results
+TestResults/
+coverage-report/
+**/coverage.cobertura.xml
+
+## BenchmarkDotNet
+BenchmarkDotNet.Artifacts/
+
+## OS files
+.DS_Store
+Thumbs.db
+
+## Verify snapshots (received files)
+*.received.*
+CLAUDE.md

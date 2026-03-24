@@ -1,0 +1,33 @@
+name: Feature Request
+description: Suggest a new feature for OpenAutoMapper
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! Please describe your use case.
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: Describe the problem you're trying to solve.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-api
+    attributes:
+      label: Proposed API
+      description: How would you like the API to look?
+      render: csharp
+  - type: textarea
+    id: automapper-equivalent
+    attributes:
+      label: AutoMapper Equivalent (if applicable)
+      description: How is this done in AutoMapper?
+      render: csharp
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Other approaches you've considered.

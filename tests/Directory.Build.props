@@ -1,0 +1,11 @@
+<Project>
+
+  <!-- Import parent Directory.Build.props -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup>
+    <!-- Suppress CA1707 (underscores in test method names) and CA2263 (generic overload preference) for test projects -->
+    <NoWarn>$(NoWarn);CA1707;CA2263</NoWarn>
+  </PropertyGroup>
+
+</Project>

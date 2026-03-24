@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <IsPackable>true</IsPackable>
+    <IsAotCompatible>true</IsAotCompatible>
+    <PackageId>OpenAutoMapper</PackageId>
+    <Description>Native AOT-first object mapper for .NET using Roslyn source generators. Near drop-in replacement for AutoMapper with zero runtime reflection.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../OpenAutoMapper.Core/OpenAutoMapper.Core.csproj" />
+    <ProjectReference Include="../OpenAutoMapper.Generator/OpenAutoMapper.Generator.csproj"
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <!-- README.md and icon.png are included via Directory.Build.props -->
+</Project>
