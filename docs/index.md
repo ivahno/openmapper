@@ -68,19 +68,19 @@ For a detailed walkthrough, see the [Getting Started guide](getting-started.md).
 OpenAutoMapper is composed of five packages:
 
 ```
-OpenAutoMapper.Abstractions (netstandard2.0; net8.0; net9.0)
+OpenAutoMapper.Abstractions (netstandard2.0; net8.0; net9.0; net10.0)
     Interfaces, attributes, base types. Zero NuGet dependencies.
         |
-OpenAutoMapper.Core (net8.0; net9.0)
+OpenAutoMapper.Core (net8.0; net9.0; net10.0)
     Profile, MapperConfiguration, fluent API implementation.
         |
 OpenAutoMapper.Generator (netstandard2.0)
     Roslyn incremental source generator. Emits mapping code at compile time.
         |
-OpenAutoMapper (net8.0; net9.0)
+OpenAutoMapper (net8.0; net9.0; net10.0)
     Meta-package: bundles Core + Generator (as analyzer).
         |
-OpenAutoMapper.DependencyInjection (net8.0; net9.0)
+OpenAutoMapper.DependencyInjection (net8.0; net9.0; net10.0)
     AddAutoMapper() / AddOpenAutoMapper() extension methods.
 ```
 

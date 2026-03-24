@@ -1,12 +1,16 @@
 title: OpenAutoMapper
-description: A Native AOT-first, high-performance object mapper for .NET
-remote_theme: just-the-docs/just-the-docs
+description: Native AOT-first object mapper for .NET using Roslyn source generators
+remote_theme: just-the-docs/just-the-docs@v0.10.1
 
-url: https://openautomappe.github.io/OpenAutoMapper
+url: https://ivahno.github.io/openmapper
+
+color_scheme: dark
 
 aux_links:
-  "GitHub":
-    - "https://github.com/OpenAutoMapper/OpenAutoMapper"
+  "GitHub": "https://github.com/ivahno/openmapper"
+  "NuGet": "https://www.nuget.org/packages/OpenAutoMapper"
+
+aux_links_new_tab: true
 
 nav_sort: case_insensitive
 
@@ -17,4 +21,4 @@ search_enabled: true
 back_to_top: true
 back_to_top_text: "Back to top"
 
-footer_content: "OpenAutoMapper is licensed under the <a href=\"https://github.com/OpenAutoMapper/OpenAutoMapper/blob/main/LICENSE\">MIT License</a>."
+footer_content: "Copyright &copy; 2026 Dmitry Ivahno. <a href=\"https://github.com/ivahno/openmapper/blob/main/LICENSE\">MIT License</a>."
