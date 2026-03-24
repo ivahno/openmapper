@@ -1,0 +1,8 @@
+<Project>
+
+  <!-- Default: not packable. Source projects override this by setting IsPackable=true in their .csproj. -->
+  <PropertyGroup Condition="'$(IsPackable)' == ''">
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+</Project>

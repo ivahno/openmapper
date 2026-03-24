@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/OpenAutoMapper.Abstractions/OpenAutoMapper.Abstractions.csproj" />
+    <Project Path="src/OpenAutoMapper.Core/OpenAutoMapper.Core.csproj" />
+    <Project Path="src/OpenAutoMapper.Generator/OpenAutoMapper.Generator.csproj" />
+    <Project Path="src/OpenAutoMapper/OpenAutoMapper.csproj" />
+    <Project Path="src/OpenAutoMapper.DependencyInjection/OpenAutoMapper.DependencyInjection.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/OpenAutoMapper.Abstractions.Tests/OpenAutoMapper.Abstractions.Tests.csproj" />
+    <Project Path="tests/OpenAutoMapper.Core.Tests/OpenAutoMapper.Core.Tests.csproj" />
+    <Project Path="tests/OpenAutoMapper.Generator.Tests/OpenAutoMapper.Generator.Tests.csproj" />
+    <Project Path="tests/OpenAutoMapper.Integration.Tests/OpenAutoMapper.Integration.Tests.csproj" />
+    <Project Path="tests/OpenAutoMapper.Benchmarks/OpenAutoMapper.Benchmarks.csproj" />
+    <Project Path="tests/OpenAutoMapper.Benchmarks.Aot/OpenAutoMapper.Benchmarks.Aot.csproj" />
+    <Project Path="tests/OpenAutoMapper.Projection.Tests/OpenAutoMapper.Projection.Tests.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/OpenAutoMapper.Samples.Basic/OpenAutoMapper.Samples.Basic.csproj" />
+    <Project Path="samples/OpenAutoMapper.Samples.Aot/OpenAutoMapper.Samples.Aot.csproj" />
+    <Project Path="samples/OpenAutoMapper.Samples.Advanced/OpenAutoMapper.Samples.Advanced.csproj" />
+    <Project Path="samples/OpenAutoMapper.Samples.EfCore/OpenAutoMapper.Samples.EfCore.csproj" />
+  </Folder>
+</Solution>

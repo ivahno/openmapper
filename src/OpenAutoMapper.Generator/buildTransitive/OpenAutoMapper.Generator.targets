@@ -1,0 +1,3 @@
+<Project>
+  <!-- This file ensures the source generator analyzer is transitively available to consuming projects. -->
+</Project>
