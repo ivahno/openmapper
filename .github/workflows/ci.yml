@@ -64,18 +64,29 @@ jobs:
       - name: Coverage Gate (70% minimum)
         if: matrix.os == 'ubuntu-latest' && matrix.dotnet == '10.0.x'
         run: |
-          COVERAGE_FILE=$(find TestResults -name 'coverage.cobertura.xml' | head -1)
-          if [ -z "$COVERAGE_FILE" ]; then
-            echo "::warning::No coverage file found, skipping gate"
+          FILES=$(find TestResults -name 'coverage.cobertura.xml')
+          if [ -z "$FILES" ]; then
+            echo "::warning::No coverage files found, skipping gate"
             exit 0
           fi
-          LINE_RATE=$(grep -oP 'line-rate="\K[0-9.]+' "$COVERAGE_FILE" | head -1)
-          if [ -z "$LINE_RATE" ]; then
-            echo "::warning::Could not parse line-rate, skipping gate"
+          TOTAL_COVERED=0
+          TOTAL_COVERABLE=0
+          for f in $FILES; do
+            COVERED=$(grep -oP 'lines-covered="\K[0-9]+' "$f" | head -1)
+            VALID=$(grep -oP 'lines-valid="\K[0-9]+' "$f" | head -1)
+            if [ -n "$COVERED" ] && [ -n "$VALID" ] && [ "$VALID" -gt 0 ]; then
+              TOTAL_COVERED=$((TOTAL_COVERED + COVERED))
+              TOTAL_COVERABLE=$((TOTAL_COVERABLE + VALID))
+              RATE=$(echo "scale=1; $COVERED * 100 / $VALID" | bc -l)
+              echo "  $(basename $(dirname $(dirname $f))): ${RATE}% ($COVERED/$VALID)"
+            fi
+          done
+          if [ "$TOTAL_COVERABLE" -eq 0 ]; then
+            echo "::warning::No coverable lines found, skipping gate"
             exit 0
           fi
-          PERCENT=$(echo "$LINE_RATE * 100" | bc -l | cut -d. -f1)
-          echo "Line coverage: ${PERCENT}%"
+          PERCENT=$((TOTAL_COVERED * 100 / TOTAL_COVERABLE))
+          echo "Overall line coverage: ${PERCENT}% ($TOTAL_COVERED/$TOTAL_COVERABLE)"
           if [ "$PERCENT" -lt 70 ]; then
             echo "::error::Line coverage ${PERCENT}% is below 70% threshold"
             exit 1
