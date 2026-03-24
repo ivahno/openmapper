@@ -21,4 +21,4 @@ search_enabled: true
 back_to_top: true
 back_to_top_text: "Back to top"
 
-footer_content: "Copyright &copy; 2026 Dmitry Ivahno. <a href=\"https://github.com/ivahno/openmapper/blob/main/LICENSE\">MIT License</a>."
+footer_content: "Copyright &copy; 2026 D. Ivahno. <a href=\"https://github.com/ivahno/openmapper/blob/main/LICENSE\">MIT License</a>."

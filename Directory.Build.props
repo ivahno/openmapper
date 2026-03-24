@@ -11,7 +11,7 @@
 
   <!-- NuGet Package Metadata -->
   <PropertyGroup>
-    <Authors>Dmitry Ivahno</Authors>
+    <Authors>D. Ivahno</Authors>
     <Company>OpenAutoMapper</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/ivahno/openmapper</PackageProjectUrl>
@@ -20,7 +20,7 @@
     <PackageTags>mapper;automapper;aot;source-generator;object-mapping;native-aot</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>icon.png</PackageIcon>
-    <Copyright>Copyright © 2026 Dmitry Ivahno</Copyright>
+    <Copyright>Copyright © 2026 D. Ivahno</Copyright>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
