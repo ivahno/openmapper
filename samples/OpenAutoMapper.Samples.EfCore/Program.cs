@@ -21,7 +21,9 @@ db.SaveChanges();
 db.Orders.AddRange(
     new Order
     {
-        OrderNumber = "ORD-001", Total = 149.97m, CustomerId = customer.Id,
+        OrderNumber = "ORD-001",
+        Total = 149.97m,
+        CustomerId = customer.Id,
         Lines = new()
         {
             new() { ProductName = "Keyboard", Quantity = 1, UnitPrice = 79.99m },
@@ -30,7 +32,9 @@ db.Orders.AddRange(
     },
     new Order
     {
-        OrderNumber = "ORD-002", Total = 25.00m, CustomerId = customer.Id,
+        OrderNumber = "ORD-002",
+        Total = 25.00m,
+        CustomerId = customer.Id,
         Lines = new() { new() { ProductName = "USB Cable", Quantity = 5, UnitPrice = 5.00m } }
     }
 );

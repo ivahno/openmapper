@@ -121,7 +121,7 @@ public sealed class MapperConfiguration : IConfigurationProvider
 
         foreach (var typeMap in _typeMaps)
         {
-            ValidateTypeMap(typeMap, errors);
+            ValidateTypeMap(typeMap);
         }
 
         if (errors.Count > 0)
@@ -154,7 +154,7 @@ public sealed class MapperConfiguration : IConfigurationProvider
 
         foreach (var typeMap in ProfileHelper.GetTypeMapConfigurations(profile))
         {
-            ValidateTypeMap(typeMap, errors);
+            ValidateTypeMap(typeMap);
         }
 
         if (errors.Count > 0)
@@ -166,7 +166,7 @@ public sealed class MapperConfiguration : IConfigurationProvider
         }
     }
 
-    private static void ValidateTypeMap(TypeMapConfiguration typeMap, List<string> errors)
+    private static void ValidateTypeMap(TypeMapConfiguration typeMap)
     {
         if (typeMap.MemberList == MemberList.None)
         {

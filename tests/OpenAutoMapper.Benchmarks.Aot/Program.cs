@@ -3,17 +3,28 @@ using OpenAutoMapper.Benchmarks.Aot;
 
 var flatSource = new OrderSource
 {
-    Id = 1, OrderNumber = "ORD-001", CustomerName = "John Doe",
-    CustomerEmail = "john@example.com", Amount = 99.99m, Tax = 8.50m,
-    Discount = 5.00m, Currency = "USD", Notes = "Test order", IsActive = true
+    Id = 1,
+    OrderNumber = "ORD-001",
+    CustomerName = "John Doe",
+    CustomerEmail = "john@example.com",
+    Amount = 99.99m,
+    Tax = 8.50m,
+    Discount = 5.00m,
+    Currency = "USD",
+    Notes = "Test order",
+    IsActive = true
 };
 
 var nestedSource = new CustomerSource
 {
-    Id = 1, Name = "John Doe",
+    Id = 1,
+    Name = "John Doe",
     Address = new AddressSource
     {
-        Street = "123 Main St", City = "Springfield", State = "IL", Zip = "62701"
+        Street = "123 Main St",
+        City = "Springfield",
+        State = "IL",
+        Zip = "62701"
     }
 };
 
@@ -30,10 +41,16 @@ for (int i = 0; i < warmup; i++)
 {
     _ = new OrderDest
     {
-        Id = flatSource.Id, OrderNumber = flatSource.OrderNumber,
-        CustomerName = flatSource.CustomerName, CustomerEmail = flatSource.CustomerEmail,
-        Amount = flatSource.Amount, Tax = flatSource.Tax, Discount = flatSource.Discount,
-        Currency = flatSource.Currency, Notes = flatSource.Notes, IsActive = flatSource.IsActive
+        Id = flatSource.Id,
+        OrderNumber = flatSource.OrderNumber,
+        CustomerName = flatSource.CustomerName,
+        CustomerEmail = flatSource.CustomerEmail,
+        Amount = flatSource.Amount,
+        Tax = flatSource.Tax,
+        Discount = flatSource.Discount,
+        Currency = flatSource.Currency,
+        Notes = flatSource.Notes,
+        IsActive = flatSource.IsActive
     };
     _ = flatSource.MapToOrderDest();
     _ = AotMapperlyMapper.MapOrder(flatSource);
@@ -47,10 +64,16 @@ for (int i = 0; i < iterations; i++)
 {
     _ = new OrderDest
     {
-        Id = flatSource.Id, OrderNumber = flatSource.OrderNumber,
-        CustomerName = flatSource.CustomerName, CustomerEmail = flatSource.CustomerEmail,
-        Amount = flatSource.Amount, Tax = flatSource.Tax, Discount = flatSource.Discount,
-        Currency = flatSource.Currency, Notes = flatSource.Notes, IsActive = flatSource.IsActive
+        Id = flatSource.Id,
+        OrderNumber = flatSource.OrderNumber,
+        CustomerName = flatSource.CustomerName,
+        CustomerEmail = flatSource.CustomerEmail,
+        Amount = flatSource.Amount,
+        Tax = flatSource.Tax,
+        Discount = flatSource.Discount,
+        Currency = flatSource.Currency,
+        Notes = flatSource.Notes,
+        IsActive = flatSource.IsActive
     };
 }
 sw.Stop();
@@ -90,11 +113,14 @@ for (int i = 0; i < iterations; i++)
 {
     _ = new CustomerDest
     {
-        Id = nestedSource.Id, Name = nestedSource.Name,
+        Id = nestedSource.Id,
+        Name = nestedSource.Name,
         Address = nestedSource.Address is not null ? new AddressDest
         {
-            Street = nestedSource.Address.Street, City = nestedSource.Address.City,
-            State = nestedSource.Address.State, Zip = nestedSource.Address.Zip
+            Street = nestedSource.Address.Street,
+            City = nestedSource.Address.City,
+            State = nestedSource.Address.State,
+            Zip = nestedSource.Address.Zip
         } : null
     };
 }

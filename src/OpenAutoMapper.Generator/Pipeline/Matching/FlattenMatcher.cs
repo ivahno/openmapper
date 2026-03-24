@@ -13,8 +13,7 @@ internal static class FlattenMatcher
 {
     public static (string accessPath, ITypeSymbol leafType)? TryFlattenMatch(
         List<IPropertySymbol> sourceProperties,
-        string destPropertyName,
-        INamedTypeSymbol sourceType)
+        string destPropertyName)
     {
         // Try to decompose the destination property name into nested source access.
         // E.g., "AddressCity" -> source has "Address" property with "City" sub-property.
@@ -24,8 +23,7 @@ internal static class FlattenMatcher
                 && destPropertyName.Length > sourceProp.Name.Length)
             {
                 var remainder = destPropertyName.Substring(sourceProp.Name.Length);
-                var innerType = sourceProp.Type as INamedTypeSymbol;
-                if (innerType is null)
+                if (sourceProp.Type is not INamedTypeSymbol innerType)
                     continue;
 
                 var innerProperties = TypeSymbolHelper.GetAllPublicProperties(innerType);

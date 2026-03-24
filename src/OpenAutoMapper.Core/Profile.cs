@@ -14,7 +14,7 @@ namespace OpenAutoMapper;
 /// </summary>
 internal sealed class CoreProfileExpressionFactory : IProfileExpressionFactory
 {
-    internal static readonly CoreProfileExpressionFactory Instance = new();
+    internal static readonly CoreProfileExpressionFactory _instance = new();
 
     public IMappingExpression<TSource, TDestination> CreateMap<TSource, TDestination>(
         MemberList memberList,
@@ -45,7 +45,7 @@ internal static class ProfileHelper
     /// </summary>
     internal static void EnsureInitialized()
     {
-        Profile.ExpressionFactory ??= CoreProfileExpressionFactory.Instance;
+        Profile.ExpressionFactory ??= CoreProfileExpressionFactory._instance;
     }
 
     /// <summary>

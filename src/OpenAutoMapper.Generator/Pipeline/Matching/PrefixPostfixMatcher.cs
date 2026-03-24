@@ -36,7 +36,7 @@ internal static class PrefixPostfixMatcher
         if (prefixMatch is not null)
         {
             var convKind = ConversionResolver.DetermineConversion(compilation, prefixMatch.Type, destProp.Type);
-            var match = PropertyMatchFactory.CreatePropertyMatch(compilation, prefixMatch.Name, prefixMatch.Type, destProp, convKind);
+            var match = PropertyMatchFactory.CreatePropertyMatch(prefixMatch.Name, prefixMatch.Type, destProp, convKind);
             if (fluentConfig is not null)
                 match = PropertyMatchFactory.WithMemberConfig(match, fluentConfig);
             return match;
@@ -58,7 +58,7 @@ internal static class PrefixPostfixMatcher
         if (postfixMatch is not null)
         {
             var convKind = ConversionResolver.DetermineConversion(compilation, postfixMatch.Type, destProp.Type);
-            var match = PropertyMatchFactory.CreatePropertyMatch(compilation, postfixMatch.Name, postfixMatch.Type, destProp, convKind);
+            var match = PropertyMatchFactory.CreatePropertyMatch(postfixMatch.Name, postfixMatch.Type, destProp, convKind);
             if (fluentConfig is not null)
                 match = PropertyMatchFactory.WithMemberConfig(match, fluentConfig);
             return match;

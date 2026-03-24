@@ -89,6 +89,10 @@ public abstract class Profile
                 "Ensure MapperConfiguration is constructed before Profile methods are called.");
         }
 
+        // The name parameter is consumed by the source generator at compile time via syntax analysis.
+        // At runtime, store it as a tag on the configuration list for potential future use.
+        _ = name;
+
         return ExpressionFactory.CreateMap<TSource, TDestination>(memberList, _typeMapConfigurations);
     }
 

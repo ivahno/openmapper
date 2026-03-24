@@ -24,7 +24,7 @@ internal static class ExactNameMatcher
         if (exactMatch is not null)
         {
             var convKind = ConversionResolver.DetermineConversion(compilation, exactMatch.Type, destProp.Type);
-            var match = PropertyMatchFactory.CreatePropertyMatch(compilation, exactMatch.Name, exactMatch.Type, destProp, convKind);
+            var match = PropertyMatchFactory.CreatePropertyMatch(exactMatch.Name, exactMatch.Type, destProp, convKind);
             if (fluentConfig is not null)
                 match = PropertyMatchFactory.WithMemberConfig(match, fluentConfig);
             return match;
@@ -37,7 +37,7 @@ internal static class ExactNameMatcher
         if (caseInsensitiveMatch is not null)
         {
             var convKind = ConversionResolver.DetermineConversion(compilation, caseInsensitiveMatch.Type, destProp.Type);
-            var match = PropertyMatchFactory.CreatePropertyMatch(compilation, caseInsensitiveMatch.Name, caseInsensitiveMatch.Type, destProp, convKind);
+            var match = PropertyMatchFactory.CreatePropertyMatch(caseInsensitiveMatch.Name, caseInsensitiveMatch.Type, destProp, convKind);
             if (fluentConfig is not null)
                 match = PropertyMatchFactory.WithMemberConfig(match, fluentConfig);
             return match;

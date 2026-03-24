@@ -8,6 +8,14 @@ namespace OpenAutoMapper.Core.Tests;
 
 public class ProfileTests
 {
+    public ProfileTests()
+    {
+        // Ensure the expression factory is initialized before any Profile tests run.
+        // On CI, test execution order may differ from local, so MapperConfiguration
+        // may not have been constructed yet to set this.
+        ProfileHelper.EnsureInitialized();
+    }
+
     [Fact]
     public void CreateMap_RegistersTypeMapConfiguration()
     {

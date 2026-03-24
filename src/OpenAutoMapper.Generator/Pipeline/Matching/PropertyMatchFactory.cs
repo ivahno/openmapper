@@ -12,7 +12,6 @@ namespace OpenAutoMapper.Generator.Pipeline.Matching;
 internal static class PropertyMatchFactory
 {
     public static PropertyMatchDescriptor CreatePropertyMatch(
-        Compilation compilation,
         string sourcePropertyName,
         ITypeSymbol sourceType,
         IPropertySymbol destProp,

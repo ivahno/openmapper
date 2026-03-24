@@ -16,8 +16,7 @@ internal static class UnflattenMatcher
     public static List<PropertyMatchDescriptor>? TryUnflattenMatch(
         Compilation compilation,
         List<IPropertySymbol> sourceProperties,
-        IPropertySymbol destProp,
-        INamedTypeSymbol destType)
+        IPropertySymbol destProp)
     {
         // Only unflatten complex types (class/struct with sub-properties)
         if (destProp.Type is not INamedTypeSymbol destPropType)

@@ -49,7 +49,6 @@ internal static class DictionaryToObjectMatcher
     /// the source dictionary by key name.
     /// </summary>
     public static List<PropertyMatchDescriptor> MatchDictionaryToObject(
-        Compilation compilation,
         INamedTypeSymbol sourceType,
         INamedTypeSymbol destType,
         ITypeSymbol dictValueType)

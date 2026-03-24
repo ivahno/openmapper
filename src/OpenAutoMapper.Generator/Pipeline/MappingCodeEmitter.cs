@@ -190,7 +190,7 @@ internal static class MappingCodeEmitter
             }
 
             // Emit mutable property assignments (skip init-only — they were in the initializer)
-            EmitPropertyAssignments(sb, typePair, "source", "result");
+            EmitPropertyAssignments(sb, typePair, "result");
 
             if (hasAfterMap)
             {
@@ -337,7 +337,7 @@ internal static class MappingCodeEmitter
         }
     }
 
-    private static void EmitPropertyAssignments(SourceStringBuilder sb, TypePairDescriptor typePair, string sourceVar, string destVar)
+    private static void EmitPropertyAssignments(SourceStringBuilder sb, TypePairDescriptor typePair, string destVar)
     {
         // Track which intermediate paths have been initialized (for ??= new)
         var initializedPaths = new HashSet<string>(StringComparer.Ordinal);

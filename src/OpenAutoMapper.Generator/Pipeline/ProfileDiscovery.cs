@@ -323,7 +323,7 @@ internal static class ProfileDiscovery
             }
             else if (string.Equals(chainMethodName, "ForPath", StringComparison.Ordinal))
             {
-                ParseForPath(parentInvocation, semanticModel, memberConfigs, ct);
+                ParseForPath(parentInvocation, memberConfigs);
             }
             else if (string.Equals(chainMethodName, "Ignore", StringComparison.Ordinal))
             {
@@ -849,9 +849,7 @@ internal static class ProfileDiscovery
     /// </summary>
     private static void ParseForPath(
         InvocationExpressionSyntax invocation,
-        SemanticModel semanticModel,
-        List<MemberConfigReference> memberConfigs,
-        CancellationToken ct)
+        List<MemberConfigReference> memberConfigs)
     {
         var args = invocation.ArgumentList.Arguments;
         if (args.Count < 2)

@@ -90,7 +90,7 @@ internal static class PropertyAnalyzer
             if (DictionaryToObjectMatcher.IsStringKeyedDictionary(sourceType, out var dictValueType))
             {
                 var dictMatches = DictionaryToObjectMatcher.MatchDictionaryToObject(
-                    compilation, sourceType, destType, dictValueType!);
+                    sourceType, destType, dictValueType!);
 
                 var sourceFullNameDict = TypeSymbolHelper.GetFullTypeName(sourceType);
                 var destFullNameDict = TypeSymbolHelper.GetFullTypeName(destType);
@@ -143,7 +143,7 @@ internal static class PropertyAnalyzer
 
             // Resolve Include types
             var includedDerived = ResolveIncludedTypes(compilation, pair.IncludedDerivedTypes,
-                sourceType, destType, context, isBase: false);
+                sourceType, context, isBase: false);
 
             int maxDepth = pair.MaxDepth ?? 10;
 
@@ -171,7 +171,7 @@ internal static class PropertyAnalyzer
 
         // Resolve IncludeBase: for each pair with IncludedBaseTypes, find the base descriptor
         // and add current pair to its IncludedDerivedTypes
-        ResolveIncludeBase(compilation, profile, results, context);
+        ResolveIncludeBase(profile, results, context);
 
         return results;
     }
@@ -189,7 +189,6 @@ internal static class PropertyAnalyzer
         Compilation compilation,
         EquatableArray<IncludedTypeReference> refs,
         INamedTypeSymbol baseSourceType,
-        INamedTypeSymbol baseDestType,
         SourceProductionContext context,
         bool isBase)
     {
@@ -229,7 +228,6 @@ internal static class PropertyAnalyzer
     }
 
     private static void ResolveIncludeBase(
-        Compilation compilation,
         ProfileInfo profile,
         List<TypePairDescriptor> results,
         SourceProductionContext context)
@@ -407,7 +405,7 @@ internal static class PropertyAnalyzer
                     if (mappedSource is not null)
                     {
                         var convKind = ConversionResolver.DetermineConversion(compilation, mappedSource.Type, destProp.Type);
-                        var match = PropertyMatchFactory.CreatePropertyMatch(compilation, mappedSource.Name, mappedSource.Type, destProp, convKind);
+                        var match = PropertyMatchFactory.CreatePropertyMatch(mappedSource.Name, mappedSource.Type, destProp, convKind);
                         match = PropertyMatchFactory.WithMemberConfig(match, fluentConfig);
                         matches.Add(match);
                         matchedDestNames.Add(destProp.Name);
@@ -448,7 +446,7 @@ internal static class PropertyAnalyzer
                     if (mappedSource is not null)
                     {
                         var convKind = ConversionResolver.DetermineConversion(compilation, mappedSource.Type, destProp.Type);
-                        matches.Add(PropertyMatchFactory.CreatePropertyMatch(compilation, mappedSource.Name, mappedSource.Type, destProp, convKind));
+                        matches.Add(PropertyMatchFactory.CreatePropertyMatch(mappedSource.Name, mappedSource.Type, destProp, convKind));
                         matchedDestNames.Add(destProp.Name);
                         continue;
                     }
@@ -474,7 +472,7 @@ internal static class PropertyAnalyzer
             }
 
             // Try flattening: e.g., dest "AddressCity" -> source "Address.City"
-            var flattenMatch = FlattenMatcher.TryFlattenMatch(sourceProperties, destProp.Name, sourceType);
+            var flattenMatch = FlattenMatcher.TryFlattenMatch(sourceProperties, destProp.Name);
             if (flattenMatch is not null)
             {
                 var convKind = ConversionResolver.DetermineConversion(compilation, flattenMatch.Value.leafType, destProp.Type);
@@ -596,7 +594,7 @@ internal static class PropertyAnalyzer
             if (TypeSymbolHelper.HasAttribute(destProp, IgnoreMapAttributeName) || TypeSymbolHelper.HasAttribute(destProp, IgnoreAttributeName))
                 continue;
 
-            var unflattenMatches = UnflattenMatcher.TryUnflattenMatch(compilation, sourceProperties, destProp, destType);
+            var unflattenMatches = UnflattenMatcher.TryUnflattenMatch(compilation, sourceProperties, destProp);
             if (unflattenMatches is not null && unflattenMatches.Count > 0)
             {
                 matches.AddRange(unflattenMatches);

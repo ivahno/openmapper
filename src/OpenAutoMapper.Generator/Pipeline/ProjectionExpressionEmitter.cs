@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 using OpenAutoMapper.Generator.Diagnostics;
 using OpenAutoMapper.Generator.Helpers;
 using OpenAutoMapper.Generator.Models;
-using Microsoft.CodeAnalysis;
 
 namespace OpenAutoMapper.Generator.Pipeline;
 
@@ -256,7 +256,7 @@ internal static class ProjectionExpressionEmitter
 
         if (sameElement || srcElem is null || dstElem is null)
         {
-            return EmitCollectionTerminal(match, sourceAccess, sourceAccess);
+            return EmitCollectionTerminal(match, sourceAccess);
         }
 
         // Look for a projection pair for element types
@@ -277,16 +277,15 @@ internal static class ProjectionExpressionEmitter
             }
             var initBody = string.Join(", ", initParts);
             var selectExpr = $"{sourceAccess}.Select(x => new {dstElem} {{ {initBody} }})";
-            return EmitCollectionTerminal(match, sourceAccess, selectExpr);
+            return EmitCollectionTerminal(match, selectExpr);
         }
 
         // Fallback — direct select
-        return EmitCollectionTerminal(match, sourceAccess, sourceAccess);
+        return EmitCollectionTerminal(match, sourceAccess);
     }
 
     private static string EmitCollectionTerminal(
         PropertyMatchDescriptor match,
-        string sourceAccess,
         string selectExpr)
     {
         var dstElem = match.DestElementType ?? match.SourceElementType;
