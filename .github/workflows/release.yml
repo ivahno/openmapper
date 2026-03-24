@@ -72,7 +72,7 @@ jobs:
       - name: Push to NuGet
         run: >
           dotnet nuget push "nupkg/*.nupkg"
-          --api-key "${{ steps.nuget-login.outputs.api-key }}"
+          --api-key "${{ steps.nuget-login.outputs.NUGET_API_KEY }}"
           --source https://api.nuget.org/v3/index.json
           --skip-duplicate
 
