@@ -42,12 +42,15 @@ jobs:
         run: dotnet test --no-build -c Release
 
       - name: Pack
-        run: >
-          dotnet pack -c Release
-          /p:Version=${{ env.VERSION }}
-          /p:ContinuousIntegrationBuild=true
-          /p:Deterministic=true
-          -o nupkg/
+        run: |
+          PACK_OPTS="-c Release /p:Version=${{ env.VERSION }} /p:ContinuousIntegrationBuild=true /p:Deterministic=true --no-build -o nupkg/"
+          dotnet pack src/OpenAutoMapper.Abstractions/ $PACK_OPTS
+          dotnet pack src/OpenAutoMapper.Core/ $PACK_OPTS
+          dotnet pack src/OpenAutoMapper/ $PACK_OPTS
+          dotnet pack src/OpenAutoMapper.DependencyInjection/ $PACK_OPTS
+          dotnet pack src/OpenAutoMapper.Generator/ $PACK_OPTS || true
+          echo "Packages created:"
+          ls -la nupkg/
 
       - name: Generate SBOM
         run: |
