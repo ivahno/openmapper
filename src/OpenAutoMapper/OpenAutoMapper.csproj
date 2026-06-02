@@ -14,5 +14,47 @@
                       ReferenceOutputAssembly="false" />
   </ItemGroup>
 
+  <!--
+    Bundle the source generator into this meta-package so a single
+    `dotnet add package OpenAutoMapper` delivers both the runtime AND the
+    generator. The Analyzer ProjectReference above only wires the generator for
+    the in-solution build; without this the published package ships no analyzer
+    and consumers get zero generated code (see ProjectTo<T> -> CS1061).
+
+    Mechanics: during THIS project's build, stage the generator assembly into this
+    project's own obj/ folder, then pack a static None item from that stable local
+    copy. Two reasons:
+      1. The release pipeline packs with the no-build option, under which custom
+         build targets do not run but statically-declared package content is still
+         collected — so the file must already be staged by the prior build.
+      2. Pointing the None directly at the generator's sibling bin/ output let pack
+         intermittently drop it: the multi-TFM parallel build + pack file-collection
+         could race on that cross-project path. Staging into this project's own obj/
+         during its own build sequence removes that race.
+    One TFM-agnostic copy is added under analyzers/dotnet/cs.
+  -->
+  <PropertyGroup>
+    <_GeneratorAssemblyPath>$(MSBuildThisFileDirectory)../OpenAutoMapper.Generator/bin/$(Configuration)/netstandard2.0/OpenAutoMapper.Generator.dll</_GeneratorAssemblyPath>
+    <_StagedGeneratorDir>$(BaseIntermediateOutputPath)gen-analyzer</_StagedGeneratorDir>
+    <_StagedGeneratorPath>$(_StagedGeneratorDir)/OpenAutoMapper.Generator.dll</_StagedGeneratorPath>
+  </PropertyGroup>
+
+  <!-- Stage the generator into obj/ as part of this project's build. The Analyzer
+       ProjectReference makes the generator a build dependency, so it exists here. -->
+  <Target Name="StageGeneratorAnalyzer" AfterTargets="Build">
+    <Error Condition="!Exists('$(_GeneratorAssemblyPath)')"
+           Text="OpenAutoMapper.Generator.dll not found at '$(_GeneratorAssemblyPath)'; cannot bundle the source generator into the package." />
+    <Copy SourceFiles="$(_GeneratorAssemblyPath)"
+          DestinationFolder="$(_StagedGeneratorDir)"
+          SkipUnchangedFiles="true" />
+  </Target>
+
+  <ItemGroup>
+    <None Include="$(_StagedGeneratorPath)"
+          Pack="true"
+          PackagePath="analyzers/dotnet/cs"
+          Visible="false" />
+  </ItemGroup>
+
   <!-- README.md and icon.png are included via Directory.Build.props -->
 </Project>

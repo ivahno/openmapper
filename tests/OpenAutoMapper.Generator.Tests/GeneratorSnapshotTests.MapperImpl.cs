@@ -97,6 +97,26 @@ public class TestProfile : Profile { public TestProfile() { CreateMap<Source, De
     }
 
     [Fact]
+    public void MapperImpl_FactoryInitializer_RegistersBothFactories()
+    {
+        // Regression: the factory initializer must register BOTH MapperFactory
+        // (CreateMapper()) and MapperFactoryWithServiceCtor (CreateMapper(serviceCtor)).
+        // The DI package resolves IMapper via CreateMapper(serviceCtor); when only the
+        // parameterless factory was registered, AddAutoMapper() worked for config but
+        // threw "No mapper factory registered" the moment IMapper was actually resolved.
+        var source = @"
+using OpenAutoMapper;
+namespace TestApp;
+public class Source { public int Id { get; set; } }
+public class Dest { public int Id { get; set; } }
+public class TestProfile : Profile { public TestProfile() { CreateMap<Source, Dest>(); } }
+";
+        var (_, generatedSources) = TestHelper.RunGenerator(source);
+        generatedSources.Should().Contain(s => s.Contains("MapperFactory"));
+        generatedSources.Should().Contain(s => s.Contains("MapperFactoryWithServiceCtor"));
+    }
+
+    [Fact]
     public void MapperImpl_NonGenericMapOverloads()
     {
         var source = @"

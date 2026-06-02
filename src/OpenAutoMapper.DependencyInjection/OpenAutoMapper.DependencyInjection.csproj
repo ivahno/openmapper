@@ -7,7 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../OpenAutoMapper/OpenAutoMapper.csproj" />
+    <!--
+      PrivateAssets="contentfiles" (instead of the default contentfiles;analyzers;build)
+      lets the source generator bundled in the OpenAutoMapper meta-package flow
+      transitively to consumers who install ONLY this DI package. Without it, the
+      default exclude="Build,Analyzers" on this dependency edge would strip the
+      analyzer and the generator would silently produce nothing. Only one physical
+      copy of the analyzer exists (in OpenAutoMapper), so installing both packages
+      does not double-load the generator.
+    -->
+    <ProjectReference Include="../OpenAutoMapper/OpenAutoMapper.csproj" PrivateAssets="contentfiles" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
   </ItemGroup>
 </Project>

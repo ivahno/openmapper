@@ -49,14 +49,14 @@ jobs:
 
       - name: Upload Test Results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-results-${{ matrix.os }}-net${{ matrix.dotnet }}
           path: TestResults/
 
       - name: Upload Coverage
         if: matrix.os == 'ubuntu-latest' && matrix.dotnet == '10.0.x'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-report
           path: TestResults/**/coverage.cobertura.xml
@@ -91,6 +91,27 @@ jobs:
             echo "::error::Line coverage ${PERCENT}% is below 70% threshold"
             exit 1
           fi
+
+  package-smoke:
+    name: Packaged Consumer Smoke Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
+
+      # Packs the real packages, installs them into a throwaway consumer, and
+      # asserts the source generator is delivered and runs (direct + DI flows).
+      # This is the only check that exercises packaging the way a consumer does;
+      # the unit/integration projects do not wire the generator as an analyzer.
+      - name: Pack + install + run a real consumer
+        run: ./eng/package-smoke-test.sh
 
   format-check:
     name: Format Check
@@ -176,7 +197,7 @@ jobs:
           --artifacts benchmark-results
 
       - name: Upload Benchmark Results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: benchmark-results
           path: benchmark-results/
