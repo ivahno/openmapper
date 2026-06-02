@@ -7,6 +7,16 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - "dependencies"
+    ignore:
+      # The source generator references Roslyn and runs inside the consumer's
+      # compiler. Building against a newer major (5.x ships with the .NET 10 SDK)
+      # makes the generator emit CS9057 and silently NOT run for consumers on the
+      # .NET 8/9 SDKs. Stay on the 4.x/3.x line "for SDK compatibility"; allow
+      # only minor/patch bumps.
+      - dependency-name: "Microsoft.CodeAnalysis.CSharp"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "Microsoft.CodeAnalysis.Analyzers"
+        update-types: ["version-update:semver-major"]
     groups:
       microsoft:
         patterns:

@@ -52,6 +52,16 @@ jobs:
           echo "Packages created:"
           ls -la nupkg/
 
+      - name: Verify generator is bundled in the meta-package
+        run: |
+          PKG="nupkg/OpenAutoMapper.${{ env.VERSION }}.nupkg"
+          if ! unzip -l "$PKG" | grep -q "analyzers/dotnet/cs/OpenAutoMapper.Generator.dll"; then
+            echo "::error::$PKG does not contain the source generator (analyzers/dotnet/cs/OpenAutoMapper.Generator.dll). Refusing to publish a package that would generate nothing for consumers."
+            unzip -l "$PKG"
+            exit 1
+          fi
+          echo "OK: source generator is bundled in $PKG"
+
       - name: Generate SBOM
         run: |
           dotnet tool install -g Microsoft.Sbom.DotNetTool || true
@@ -75,7 +85,7 @@ jobs:
           --skip-duplicate
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: |
             nupkg/*.*nupkg

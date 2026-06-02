@@ -11,6 +11,8 @@
 
   <!-- NuGet Package Metadata -->
   <PropertyGroup>
+    <!-- 1.0.1: fixes 1.0.0 packaging bug where the source generator was never delivered to consumers. -->
+    <Version>1.0.1</Version>
     <Authors>D. Ivahno</Authors>
     <Company>OpenAutoMapper</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
