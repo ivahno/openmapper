@@ -64,7 +64,10 @@ jobs:
       - name: Coverage Gate (70% minimum)
         if: matrix.os == 'ubuntu-latest' && matrix.dotnet == '10.0.x'
         run: |
-          FILES=$(find TestResults -name 'coverage.cobertura.xml')
+          # Coverlet writes one summary report per test run and also per-module
+          # copies under an In/ folder. Summing every copy counts the same lines
+          # twice and makes this gate fail or pass depending on which copies exist.
+          FILES=$(find TestResults -mindepth 2 -maxdepth 2 -name 'coverage.cobertura.xml')
           if [ -z "$FILES" ]; then
             echo "::warning::No coverage files found, skipping gate"
             exit 0
