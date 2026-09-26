@@ -11,8 +11,8 @@
 
   <!-- NuGet Package Metadata -->
   <PropertyGroup>
-    <!-- 1.0.1: fixes 1.0.0 packaging bug where the source generator was never delivered to consumers. -->
-    <Version>1.0.1</Version>
+    <!-- 1.0.2: security patches for GHSA-23fw-v26w-5fgq and GHSA-2m69-gcr7-jv3q. -->
+    <Version>1.0.2</Version>
     <Authors>D. Ivahno</Authors>
     <Company>OpenAutoMapper</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
