@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-09-26
+
+### Security
+
+- Update Microsoft.SourceLink.GitHub to 10.0.401, which pulls Microsoft.Build.Tasks.Git 10.0.401 and clears GHSA-23fw-v26w-5fgq.
+- Update Microsoft.EntityFrameworkCore.Sqlite to 10.0.12, which pulls SQLitePCLRaw 2.1.12 (SQLite 3.53.3) and clears GHSA-2m69-gcr7-jv3q.
+
+### Changed
+
+- Update the remaining direct NuGet packages to current stable versions, including Microsoft.Extensions 10.0.12, Roslyn 4.14.0, the test SDK 18.10.1, FluentAssertions 8.11.0, xunit.runner.visualstudio 4.0.0, AutoMapper 16.2.0, and Mapster 10.0.13.
+- Update GitHub Actions `actions/checkout` to v7 and `actions/setup-dotnet` to v6.
+
 ## [Unreleased]
 
 ### Added
